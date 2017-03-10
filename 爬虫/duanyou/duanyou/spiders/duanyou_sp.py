@@ -21,17 +21,21 @@ class duanyou_sp(CrawlSpider):
 	rules=[
 		Rule(LinkExtractor(allow=("game-list-0-0-0-0-0-0-0-0-0-0-1-2.html\?page\=([\d]+)",),), follow=True, callback='parse_item')
 	]
-	def parse_item(self,response):
-		items=[]
+	def parse_item(self,response):	
 		sel=Selector(response)
 		base_url=get_base_url(response)
 		sites_even=sel.xpath('//h2[@class="tit"]')
-		for sit in sites_even:
+		items=[]
+		
+		na=sites_even.xpath('a/text()').extract()
+		ur=sites_even.xpath('a/@href').extract()
+		for i in range(20):
 			item=DuanyouItem()
-			item['name']=sit.xpath('a/text()').extract()
-			item['nurl']=sit.xpath('a/@href').extract()[0]
+			item["name"]=na[i]
+			item["nurl"]=ur[i]
 			items.append(item)
-		return Request(item['nurl'],meta={'item':item},callback=self.parse2)
+		for item in items:
+			yield  Request(item['nurl'],meta={'item':item},callback=self.parse2)
 
 	def parse2(self,response):
 		sel=Selector(response)
@@ -45,6 +49,6 @@ class duanyou_sp(CrawlSpider):
 		item['pattern']=content[5]
 		item['form']=content[6]
 		item['feature']=content[7:-1]
-		item['pay']=sel.xpath('//span[@class="con"]/span')
-		item['ranking']=sel.xpath('//div[@class="qdprank"]/a').extract()
+		item['pay']=sel.xpath('//span[@class="con"]/span/text()').extract()[1]
+		#item['ranking']=sel.xpath('//div[@class="qdprank"]/a').extract()
 		return item
