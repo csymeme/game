@@ -1,0 +1,4 @@
+duanyou是根据scrapy编写的17173端游库的爬虫小程序，得到数据保存在data.json内
+
+遇到问题1.spider文件内name的名称不能和项目名相同
+2.每次只能爬取125个item。解决方法，将return换成yield
