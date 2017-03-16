@@ -20,8 +20,11 @@ def loop_data(o,k=""):
 			else:
 				loop_data(value,k+'.'+key)
 	elif isinstance(o,list):
-		for ov in o:
-			loop_data(ov,k)
+		if not k in json_ob:
+			json_ob[k]={}
+		content = ";".join(o)
+		json_ob[k][c_line]=content
+
 	else:
 		if not k in json_ob:
 			json_ob[k]={}
