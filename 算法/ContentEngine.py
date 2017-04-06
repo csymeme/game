@@ -90,4 +90,4 @@ class ContentEngine(object):
                               withscores=True,
                               desc=True)
  
-content_engine = ContentEngine()
+con_engine = ContentEngine()
